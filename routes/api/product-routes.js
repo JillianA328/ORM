@@ -7,9 +7,12 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 router.get('/', (req, res) => {
   Product.findAll({
-    include: [ Category ]
+    include: [ Category, {
+      model: Tag,
+      through: ProductTag
+    }]
   })
-    .then(dbUserData => res.json(dbUserData))
+    .then(dbProductData => res.json(dbProductData))
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
@@ -23,12 +26,12 @@ router.get('/:id', (req, res) => {
     },
     include: {model: Product}
   
-    .then(dbUserData => {
-      if (!dbUserData) {
+    .then(dbProductData => {
+      if (!dbProductData) {
         res.status(404).json({ message: 'Category not found' });
         return;
       }
-      res.json(dbUserData);
+      res.json(dbProductData);
     })
     .catch(err => {
       console.log(err);
@@ -41,7 +44,7 @@ router.post('/', (req, res) => {
 
   Product.create(
     createcategory.req.body
-  ).then(dbUserData => res.json(dbUserData))
+  ).then(dbProductData => res.json(dbProductData))
     .catch(err => {
       console.log(err);
       res.status(500).json(err);

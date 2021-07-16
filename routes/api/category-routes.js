@@ -5,9 +5,9 @@ const { Category, Product } = require('../../models');
 
 router.get('/', (req, res) => {
   Category.findAll({
-    include: [Product ]
+    include: [ Product ]
   }
-  ).then( dbUserData=> res.json(dbUserData))
+  ).then( dbCategoryData=> res.json(dbCategoryData))
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
@@ -20,12 +20,12 @@ router.get('/:id', (req, res) => {
       id: req.params.id
     },
     include: [Product]
-    .then(dbUserData => {
-      if (!dbUserData) {
+    .then(ddbCategoryData => {
+      if (!dbCategoryData) {
         res.status(404).json({ message: 'Category not found' });
         return;
       }
-      res.json(dbUserData);
+      res.json(dbCategoryData);
     })
     .catch(err => {
       console.log(err);
@@ -36,8 +36,8 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
  
   Category.create(
-    createcategory.req.body
-  ).then(dbUserData => res.json(dbUserData))
+    req.body
+  ).then(ddbCategoryData => res.json(dbCategoryData))
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
@@ -46,17 +46,16 @@ router.post('/', (req, res) => {
 
 
 router.put('/:id', (req, res) => {
-  Category.update(req.body, {
-    category_name: req.body.category_name,
-    where: {id: req.params.id
+  Category.update( 
+    { category_name: req.body.category_name },
+    { where: {id: req.params.id }
     }
-    }
-  ).then(dbUserData => {
-      if (!dbUserData[0]) {
+  ).then(dbCategoryData => {
+      if (!dbCategoryData[0]) {
         res.status(404).json({ message: 'Category not found' });
         return;
       }
-      res.json(dbUserData);
+      res.json(dbCategoryData);
     })
     .catch(err => {
       console.log(err);
@@ -70,12 +69,12 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-    .then(dbUserData => {
-      if (!dbUserData) {
+    .then(dbCategoryData => {
+      if (!dbCategoryData) {
         res.status(404).json({ message: 'Category not found' });
         return;
       }
-      res.json(dbUserData);
+      res.json(dbCategoryData);
     })
     .catch(err => {
       console.log(err);
