@@ -5,20 +5,17 @@ const { Category, Product } = require('../../models');
 
 router.get('/', (req, res) => {
   Category.findAll({
-    include: [Product
-    ]}
-  .then(ecommerce_db => res.json(ecommerce_db))
+    include: [Product ]
+  }
+  ).then( dbUserData=> res.json(dbUserData))
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
-  });
-
-// be sure to include its associated Products
+  })
 });
 
 router.get('/:id', (req, res) => {
   Category.findOne({
-    attributes: { exclude: ['password'] },
     where: {
       id: req.params.id
     },
@@ -33,7 +30,7 @@ router.get('/:id', (req, res) => {
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
-    });
+    }),
 });
 
 router.post('/', (req, res) => {
@@ -48,15 +45,9 @@ router.post('/', (req, res) => {
 });
 
 
-where: {
-  id: req.params.id
-}
-})
-
 router.put('/:id', (req, res) => {
   Category.update(req.body, {
-    category_name: req.body.category_name
-{
+    category_name: req.body.category_name,
     where: {id: req.params.id
     }
     }
@@ -90,6 +81,7 @@ router.delete('/:id', (req, res) => {
       console.log(err);
       res.status(500).json(err);
     });
+});
 });
 
 
