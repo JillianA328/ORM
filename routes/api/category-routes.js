@@ -19,8 +19,9 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: [Product]
-    .then(ddbCategoryData => {
+    include: [ Product ]
+    }
+    ).then(dbCategoryData => {
       if (!dbCategoryData) {
         res.status(404).json({ message: 'Category not found' });
         return;
@@ -30,7 +31,7 @@ router.get('/:id', (req, res) => {
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
-    }),
+    });
 });
 
 router.post('/', (req, res) => {
@@ -81,7 +82,7 @@ router.delete('/:id', (req, res) => {
       res.status(500).json(err);
     });
 });
-});
+
 
 
 module.exports = router;
