@@ -4,9 +4,12 @@ const { Tag, Product, ProductTag } = require('../../models');
 // The `/api/tags` endpoint
 router.get('/', (req, res) => {
   Tag.findAll({
-    include: [Product ]
+    include: [{ 
+      model: Product,
+      through: ProductTag
+    }]
   }
-  ).then( dbUserData=> res.json(dbUserData))
+  ).then( dbTagData=> res.json(dbTagData))
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
@@ -18,13 +21,12 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: {Product}
-  }).then(dbUserData => {
-      if (!dbUserData) {
-        res.status(404).json({ message: 'Tag not found' });
-        return;
-      }
-      res.json(dbUserData);
+    include: [{ 
+      model: Product,
+      through: ProductTag
+    }]
+  }).then(dbTagData => {
+      res.json(dbTagData);
     })
     .catch(err => {
       console.log(err);
@@ -34,8 +36,8 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
  
   Tag.create(
-    createTag.req.body
-  ).then(dbUserData => res.json(dbUserData))
+req.body
+  ).then(dbTagData => res.json(dbTagData))
     .catch(err => {
       console.log(err);
       res.status(500).json(err);
@@ -48,12 +50,8 @@ router.put('/:id', (req, res) => {
       id: req.params.id
     }
   }  
-  ).then(dbUserData => {
-      if (!dbUserData[0]) {
-        res.status(404).json({ message: 'Tag not found' });
-        return;
-      }
-      res.json(dbUserData);
+  ).then(dbTagData => {
+      res.json(dbTagData);
     })
     .catch(err => {
       console.log(err);
@@ -67,12 +65,8 @@ router.delete('/:id', (req, res) => {
       id: req.params.id
     }
   })
-    .then(dbUserData => {
-      if (!dbUserData) {
-        res.status(404).json({ message: 'Tag not found' });
-        return;
-      }
-      res.json(dbUserData);
+    .then(dbTagData => {
+      res.json(dbTagData);
     })
     .catch(err => {
       console.log(err);

@@ -24,13 +24,9 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: {model: Product}
+    include: [ Category, {model: Tag, through: ProductTag} ]
   
     .then(dbProductData => {
-      if (!dbProductData) {
-        res.status(404).json({ message: 'Category not found' });
-        return;
-      }
       res.json(dbProductData);
     })
     .catch(err => {
@@ -39,21 +35,7 @@ router.get('/:id', (req, res) => {
     }),
 });
 
-
-router.post('/', (req, res) => {
-
-  Product.create(
-    createcategory.req.body
-  ).then(dbProductData => res.json(dbProductData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-
-
-
+ 
 // create new product
 router.post('/', (req, res) => {
   /* req.body should look like this...
@@ -128,10 +110,22 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
-});
-});
 
+router.delete('/:id', (req, res) => {
+  Product.destroy({
+    where: {
+      id: req.params.id
+    }
+  })
+    .then(dbPrductData => {
+      res.json(dbPrductData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+});
 
 module.exports = router;
+
