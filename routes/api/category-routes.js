@@ -18,10 +18,8 @@ router.get('/:id', (req, res) => {
   Category.findOne({
     where: {
       id: req.params.id
-    },
-    include: [ Product ]
-    }
-    ).then(dbCategoryData => {
+    },include: [Product]
+    }).then(dbCategoryData => {
 
       res.json(dbCategoryData);
     })
@@ -33,8 +31,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
  
-  Category.create(
-    req.body
+  Category.create( req.body
   ).then(dbCategoryData => res.json(dbCategoryData))
     .catch(err => {
       console.log(err);
